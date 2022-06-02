@@ -1,7 +1,7 @@
 (() => {
     
     let words = ["test", "hello", "world", "array", "computer", "microphone", "keyboard", "gamepad", "controller", "water", "switch",
-                 "javascript", "streaming", "camera", "desktop", "lamp", "shoes", "ananas", "banana", "apple", "orange", "melon", "peer"];
+                 "javascript", "streaming", "camera", "desktop", "lamp", "shoes", "pineapple", "banana", "apple", "orange", "melon", "peer"];
 
     let randomWord = "";
     let currentTds = [];
@@ -16,7 +16,6 @@
 
     //Generate a game
     document.getElementById("play").addEventListener("click", () => {
-        console.log("Start a game!");
         //reset previous game data
         console.clear();
         currentLives = maxLivesAmount;
@@ -39,10 +38,15 @@
         //add new word slots
         for(let i = 0; i < randomWord.length; i++){
             let newTd = document.createElement("td");
-            newTd.innerHTML = "___";
+            newTd.innerHTML = "";
+            newTd.style.width = "50px";
+            newTd.style.height = "50px";
+            newTd.style.fontSize = "35px";
             document.getElementById("tableRow").appendChild(newTd);
             currentTds.push(newTd);
         }
+
+        document.getElementById("tableSection").style.visibility = "visible";
     });
 
     //Guess letters
@@ -70,7 +74,7 @@
         for(let i = 0; i < randomWord.length; i++){
             if(letter == randomWord[i]){
                 let UpLetter = letter.toUpperCase();
-                currentTds[i].innerHTML = `_${UpLetter}_`
+                currentTds[i].innerHTML = `${UpLetter}`;
                 letterFoundCount++;
                 hasLetter = true;
             }

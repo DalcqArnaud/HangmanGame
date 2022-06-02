@@ -9,7 +9,7 @@
         grid-template-columns: 1fr 75% 1fr;
     }
     img{
-        width: 75%;
+        width: 60%;
         order: -1;
     }
     #hangmanImageSection{
@@ -41,14 +41,16 @@ body{
     display: grid;
     row-gap: 5%;
     text-align: center;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Pangolin', cursive;
+    background-image: url("../images/Paper_Background.png");
 }
 td{
-    border: 2px solid black;
+    border-bottom: 2px solid black;
 }
 
 header{
     grid-column: 2 / 2;
+    margin-top: 20px;
 }
 
 section{
@@ -56,11 +58,35 @@ section{
 }
 #tableSection{
     justify-self: center;
+    visibility: hidden;
 }
 
-
 #lives{
-    font-family: 'Pangolin', cursive;
     font-weight: bold;
     font-size: xx-large;
+    justify-self: start;
+    margin-bottom: 20px;
+}
+
+button[id^=letter-]{
+    width: 35px;
+    height: 35px;
+    font-family: 'Pangolin', cursive;
+    font-size: x-large;
+}
+
+#play{
+    width: 100px;
+    height: 35px;
+    font-family: 'Pangolin', cursive;
+    font-size: x-large;
+    margin: 20px;
+}
+
+header>p{
+    margin: 20px;
+}
+
+header>h1{
+    font-size: 50px;
 }
