@@ -1,0 +1,66 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+@media screen and (min-width: 768px){
+    body{
+        grid-template-columns: 1fr 75% 1fr;
+    }
+    img{
+        width: 75%;
+        order: -1;
+    }
+    #hangmanImageSection{
+        display: grid;
+        grid-template-columns: 75% 25%;
+        place-items: center ;
+
+    }
+}
+
+@media screen and (min-width: 375px) and (max-width: 768px){
+    body{
+        grid-template-columns: 1fr 90% 1fr;
+    }
+    img{
+        width: 75%;
+    }
+}
+
+@media screen and (max-width: 375px) {
+    body{
+        grid-template-columns: 1fr 90% 1fr;
+    }
+    img{
+        width: 100%;
+    }
+}
+body{
+    display: grid;
+    row-gap: 5%;
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+}
+td{
+    border: 2px solid black;
+}
+
+header{
+    grid-column: 2 / 2;
+}
+
+section{
+    grid-column: 2 / 2;
+}
+#tableSection{
+    justify-self: center;
+}
+
+
+#lives{
+    font-family: 'Pangolin', cursive;
+    font-weight: bold;
+    font-size: xx-large;
+}

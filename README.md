@@ -1,4 +1,4 @@
-== The mission
+## The mission
 
 You have to make a website version of the {hangman}[hangman] word game. To do so
 try to think the *structure*, the *backend* (functionality) and the *frontend*
