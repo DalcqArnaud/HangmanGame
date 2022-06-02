@@ -2,3 +2,4 @@
 -Make text size responsive
 -Upgrade buttons style
 -Colors?
+-fix alerts spawn timing
