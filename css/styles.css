@@ -4,48 +4,12 @@
     box-sizing: border-box;
 }
 
-@media screen and (min-width: 768px){
-    body{
-        grid-template-columns: 1fr 75% 1fr;
-    }
-    img{
-        width: 60%;
-        order: -1;
-    }
-    #hangmanImageSection{
-        display: grid;
-        grid-template-columns: 75% 25%;
-        place-items: center ;
-
-    }
-}
-
-@media screen and (min-width: 375px) and (max-width: 768px){
-    body{
-        grid-template-columns: 1fr 90% 1fr;
-    }
-    img{
-        width: 75%;
-    }
-}
-
-@media screen and (max-width: 375px) {
-    body{
-        grid-template-columns: 1fr 90% 1fr;
-    }
-    img{
-        width: 100%;
-    }
-}
 body{
     display: grid;
     row-gap: 5%;
     text-align: center;
     font-family: 'Pangolin', cursive;
     background-image: url("../images/Paper_Background.png");
-}
-td{
-    border-bottom: 2px solid black;
 }
 
 header{
@@ -58,7 +22,14 @@ section{
 }
 #tableSection{
     justify-self: center;
-    visibility: hidden;
+    display: none;
+}
+
+td{
+    border-bottom: 2px solid black;
+    width: 50px;
+    height: 50px;
+    font-size: 35px;
 }
 
 #lives{
@@ -71,8 +42,10 @@ section{
 button[id^=letter-]{
     width: 35px;
     height: 35px;
+    font-size: 25px;
     font-family: 'Pangolin', cursive;
-    font-size: x-large;
+    border-radius: 15%;
+    background-color: aliceblue;
 }
 
 #play{
@@ -81,6 +54,7 @@ button[id^=letter-]{
     font-family: 'Pangolin', cursive;
     font-size: x-large;
     margin: 20px;
+    border-radius: 7px;
 }
 
 header>p{
@@ -89,4 +63,61 @@ header>p{
 
 header>h1{
     font-size: 50px;
+}
+
+#resultLose{
+    color: rgba(191, 64, 64, 1);
+}
+
+#resultWin{
+    color: rgba(64, 191, 64, 1);
+}
+
+@media screen and (min-width: 768px){
+    body{
+        grid-template-columns: 1fr 75% 1fr;
+    }
+    img{
+        width: 60%;
+        order: -1;
+    }
+    #hangmanImageSection{
+        display: grid;
+        grid-template-columns: 75% 25%;
+        place-items: center ;
+    }
+    
+}
+
+@media screen and (min-width: 420px) and (max-width: 768px){
+    body{
+        grid-template-columns: 1fr 90% 1fr;
+    }
+    img{
+        width: 75%;
+    }
+}
+
+@media screen and (max-width: 420px) {
+    body{
+        grid-template-columns: 1fr 90% 1fr;
+    }
+    img{
+        width: 50%;
+    }
+    td{
+        border-bottom: 2px solid black;
+        width: 25px;
+        height: 25px;
+        font-size: 15px;
+    }
+    button[id^=letter-]{
+        width: 25px;
+        height: 25px;
+        font-size: 15px;
+        font-family: 'Pangolin', cursive;
+    }
+    header>h1{
+        font-size: 35px;
+    }
 }
