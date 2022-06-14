@@ -70,7 +70,6 @@ playBtn.addEventListener("click", () => {
         } 
     }
     
-    console.log(randomIndex);
     randomWord = useFrench ? frWords[randomIndex] : enWords[randomIndex];
     previousRandomIndex = randomIndex;
 
