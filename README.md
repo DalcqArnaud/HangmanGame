@@ -1,3 +1,8 @@
+## Changelog
+* Add an option to play with english words
+* Fix mouseover button color bug on Firefox
+* Prevent random words to be the same as the one just played before
+
 ## The mission
 
 You have to make a website version of the {hangman}[hangman] word game. To do so

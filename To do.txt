@@ -1,5 +1,0 @@
--Update image and life count when start a new game
--Make text size responsive
--Upgrade buttons style
--Colors?
--fix alerts spawn timing

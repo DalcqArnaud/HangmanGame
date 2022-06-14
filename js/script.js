@@ -1,7 +1,13 @@
-let words = ["pomme", "poire", "ananas", "peche", "raisin", "cerise", "banane", "fraise", "melon", "pasteque", "bouteille", "nourriture", "multiplication", "aleatoire", "essayer", "danser", "ordinateur", "clavier", 
+let frWords = ["pomme", "poire", "ananas", "peche", "raisin", "cerise", "banane", "fraise", "melon", "pasteque", "bouteille", "nourriture", "multiplication", "aleatoire", "essayer", "danser", "ordinateur", "clavier", 
             "camera", "souris", "ecran", "manette", "ciseaux", "crayon", "stylo", "gourde", "gomme", "cartable", "bureau", "console", "deodorant", "porte", "chambre", "peignoir", "lampe", "mouchoir", 
             "rouge", "noir", "blanc", "jaune", "bleu", "vert", "orange", "violet", "brun", "lustre", "squelette", "jambe", "torse", "bras", "tete", "epaule", "genou", "pied"];
 
+let enWords = ["apple", "pineapple", "orange", "peer", "grape", "cherry", "flower", "computer", "keyboard", "mouse", "water", "lava", "blue", "green", "black", "white", 
+            "purple", "brown", "yellow", "lamp", "bike", "chest", "head", "shoulder", "feet", "knee", "skeleton", "camera", "screen", "gamepad", "pencil", "eraser", 
+            "bottle", "desktop", "door", "room", "multiplication", "addition", "subtraction", "division", "number", "digit", "operation", "result", "journey", "race", "parking"];
+
+let previousRandomIndex = frWords.length + enWords.length + 6543515685;
+let randomIndex = 0;
 let randomWord = "";
 let currentTds = [];
 let letterFoundCount = 0;
@@ -12,16 +18,39 @@ let currentLives = 5;
 let lettersBtn = document.querySelectorAll("[id^=letter-]");
 let AllBtn = document.querySelectorAll("button");
 let hangmanLiveText = document.getElementById("lives");
+let playBtn = document.getElementById("play");
+let frBtn = document.getElementById("french");
+let enBtn = document.getElementById("english");
+let language = document.getElementById("language");
+
+let useFrench = true;
 
 updateHangmanLife();
 
+frBtn.addEventListener("click", () =>{
+    useFrench = true;
+    playBtn.disabled = false;
+    frBtn.remove();
+    enBtn.remove();
+    language.innerHTML = `I'm using FRENCH words`
+});
+
+enBtn.addEventListener("click", () =>{
+    useFrench = false;
+    playBtn.disabled = false;
+    frBtn.remove();
+    enBtn.remove();
+    language.innerHTML = `I'm using ENGLISH words`
+});
+
 //Generate a game
-document.getElementById("play").addEventListener("click", () => {
+playBtn.addEventListener("click", () => {
     //reset previous game data
     console.clear();
     currentLives = maxLivesAmount;
     updateHangmanLife();
     letterFoundCount = 0;
+    let areTheSame = true;
     currentTds = [];
     let tds = document.querySelectorAll("td");
     tds.forEach(element => {
@@ -33,8 +62,18 @@ document.getElementById("play").addEventListener("click", () => {
     });
 
     //generate new word
-    let randomIndex = Math.round(Math.random() * words.length);
-    randomWord = words[randomIndex];
+    while(areTheSame){
+        randomIndex = useFrench ? Math.floor(Math.random() * frWords.length) : Math.floor(Math.random() * enWords.length);
+
+        if(randomIndex != previousRandomIndex){
+            areTheSame = false;
+        } 
+    }
+    
+    console.log(randomIndex);
+    randomWord = useFrench ? frWords[randomIndex] : enWords[randomIndex];
+    previousRandomIndex = randomIndex;
+
     letterAmountToFind = randomWord.length;
     console.log(`The random word is : ${randomWord} !`);
 
@@ -69,11 +108,15 @@ for(let i = 0; i < AllBtn.length; i++){
 }
 
 function mouseOver(e){
-    e.target.style.background = "rgb(175, 175, 175)";
+    if(!e.target.disabled){
+        e.target.style.background = "rgb(175, 175, 175)";
+    }
 }
   
 function mouseOut(e){
-    e.target.style.background = "aliceblue";
+    if(!e.target.disabled){
+        e.target.style.background = "aliceblue";
+    }
 }
 
 //Check letters

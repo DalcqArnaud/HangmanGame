@@ -53,12 +53,18 @@ button[id^=letter-]{
     height: 35px;
     font-family: 'Pangolin', cursive;
     font-size: x-large;
-    margin: 20px;
     border-radius: 7px;
 }
 
-header>p{
+#languages{
     margin: 20px;
+}
+#languages>button{
+    width: 50px;
+    height: 35px;
+    font-family: 'Pangolin', cursive;
+    font-size: x-large;
+    border-radius: 7px;
 }
 
 header>h1{
