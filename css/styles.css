@@ -71,12 +71,17 @@ header>h1{
     font-size: 50px;
 }
 
-#resultLose{
-    color: rgba(191, 64, 64, 1);
+.noScale {
+    transform: scale(0);
 }
 
-#resultWin{
-    color: rgba(64, 191, 64, 1);
+.scaleUpAnimation{
+    animation: 1s scaleUp forwards;
+}
+
+@keyframes scaleUp {
+    from { transform: scale(0); }
+    to   { transform: scale(1); }
 }
 
 @media screen and (min-width: 768px){
