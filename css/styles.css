@@ -39,13 +39,21 @@ td{
     margin-bottom: 20px;
 }
 
-button[id^=letter-]{
+svg[id^="Postit"]{
     width: 35px;
-    height: 35px;
-    font-size: 25px;
-    font-family: 'Pangolin', cursive;
-    border-radius: 15%;
-    background-color: aliceblue;
+    margin: 3px;
+}
+
+svg[id$="disabled"]{
+    pointer-events: none;
+}
+
+svg[id^="Postit"]>path[id^="failPath-"]{
+    visibility: hidden;
+}
+
+svg[id^="Postit"]>path[id^="foundPath-"]{
+    visibility: hidden;
 }
 
 #play{
@@ -79,16 +87,48 @@ header>h1{
     animation: 1s scaleUp forwards;
 }
 
+g[id="HangmanAllBody"]{
+    position: relative;
+    transform-origin: 80% 10%;
+    animation: hangmanRotate 3s infinite ease-in-out;
+}
+
+g[id="HangmanAllBody"]>g[id^="Head"]{
+    visibility: hidden;
+}
+
+g[id="HangmanAllBody"]>g[id^="Body"]{
+    visibility: hidden;
+}
+
+g[id="HangmanAllBody"]>g[id^="LeftArm"]{
+    visibility: hidden;
+}
+
+g[id="HangmanAllBody"]>g[id^="RightArm"]{
+    visibility: hidden;
+}
+
+g[id="HangmanAllBody"]>g[id^="Legs"]{
+    visibility: hidden;
+}
+
 @keyframes scaleUp {
     from { transform: scale(0); }
     to   { transform: scale(1); }
+}
+
+@keyframes hangmanRotate{
+    0% { transform: rotate(-3deg);}
+    50% { transform: rotate(3deg);}
+    100% { transform: rotate(-3deg);}
 }
 
 @media screen and (min-width: 768px){
     body{
         grid-template-columns: 1fr 75% 1fr;
     }
-    img{
+    svg{
         width: 60%;
         order: -1;
     }
@@ -104,7 +144,7 @@ header>h1{
     body{
         grid-template-columns: 1fr 90% 1fr;
     }
-    img{
+    svg{
         width: 75%;
     }
 }
@@ -113,7 +153,7 @@ header>h1{
     body{
         grid-template-columns: 1fr 90% 1fr;
     }
-    img{
+    svg{
         width: 50%;
     }
     td{
@@ -122,12 +162,12 @@ header>h1{
         height: 25px;
         font-size: 15px;
     }
-    button[id^=letter-]{
+
+    svg[id^="Postit"]{
         width: 25px;
-        height: 25px;
-        font-size: 15px;
-        font-family: 'Pangolin', cursive;
+        margin: 1px;
     }
+
     header>h1{
         font-size: 35px;
     }

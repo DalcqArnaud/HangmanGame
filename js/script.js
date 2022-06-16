@@ -34,6 +34,16 @@ let areTheSame = true;
 let startLetterASCIIIndex = 65;
 let currentLetterASCIIIndex = 0;
 
+let HeadPaths = document.querySelectorAll('g[id="HangmanAllBody"]>g[id^="Head"]');
+let BodyPaths = document.querySelectorAll('g[id="HangmanAllBody"]>g[id^="Body"]');
+let LegsPaths = document.querySelectorAll('g[id="HangmanAllBody"]>g[id^="Legs"]');
+let LeftArmPaths = document.querySelectorAll('g[id="HangmanAllBody"]>g[id^="LeftArm"]');
+let RightArmPaths = document.querySelectorAll('g[id="HangmanAllBody"]>g[id^="RightArm"]');
+
+let HangmanDudeParts = [RightArmPaths, LeftArmPaths, LegsPaths, BodyPaths, HeadPaths];
+
+let lettersSVG = document.querySelectorAll("svg[id^='letter-']");
+
 ////////////////////////////////////////////////////////////// FUNCTIONS //////////////////////////////////////////////////////////////
 
 /**
@@ -58,13 +68,13 @@ function mouseOut(e){
 
 /**
  * Check if a letter is in the random word
- * @param {Element} btn Letter button to check if the letter is in the word
+ * @param {String} letterToCheck Letter to check if it is in the random word
  */
-function checkLetter(btn){
+function checkLetter(letterToCheck){
     let hasLetter = false;
     for(let i = 0; i < randomWord.length; i++){
-        if(btn.textContent.toLowerCase() == randomWord[i]){
-            let UpLetter = btn.textContent.toUpperCase();
+        if(letterToCheck.toLowerCase() == randomWord[i]){
+            let UpLetter = letterToCheck.toUpperCase();
             currentTds[i].innerHTML = `${UpLetter}`;
             letterFoundCount++;
             hasLetter = true;
@@ -72,8 +82,6 @@ function checkLetter(btn){
     }
 
     if(!hasLetter){
-        setDisableState(btn, true);
-        btn.style.backgroundColor = "aliceblue";
         currentLives--;
         updateHangmanLife();
         //Check for lose
@@ -81,8 +89,6 @@ function checkLetter(btn){
             gameOver();
         }
     }else{
-        setDisableState(btn, true);
-        btn.style.backgroundColor = "aliceblue";
         //Check for win
         if(letterFoundCount == letterAmountToFind){
             win();
@@ -119,10 +125,21 @@ function gameOver(){
 }
 
 /**
- * (called to update hangman image and lives text according to current user lives)
+ * (Called to update hangman svg and lives text according to current user lives)
  */
 function updateHangmanLife(){
-    hangmanImage.setAttribute("src", `images/Hangman_${currentLives}.png`);
+    if(currentLives >= HangmanDudeParts.length){
+        for(let i = 0; i < HangmanDudeParts.length; i++){
+            HangmanDudeParts[i].forEach(element => {
+                element.style.visibility = "hidden";
+            });
+        }
+    }
+    else{
+        HangmanDudeParts[currentLives].forEach(element => {
+            element.style.visibility = "visible";
+        });
+    }
     hangmanLiveText.innerHTML = `Lives : ${currentLives}`;
 }
 
@@ -217,29 +234,95 @@ function GenerateWordSlots(){
  */
 function GenerateLetterBtns(){
     for(let i = 0; i < 26; i++){
-        let letterBtn = document.createElement("button");
         let letter = String.fromCharCode(currentLetterASCIIIndex);
 
-        letterBtn.addEventListener("click", () => {
-            checkLetter(letterBtn);
-        });
-        letterBtn.addEventListener("mouseover", mouseOver);
-        letterBtn.addEventListener("mouseout", mouseOut);
+        let letterSVGParent = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        letterSVGParent.setAttribute("id", `Postit-${letter}`);
+        letterSVGParent.setAttribute("viewBox", "0 0 84.84 103.66")
 
-        letterBtn.innerHTML = letter;
-        setDisableState(letterBtn, false);
-        letterBtn.style.backgroundColor = "aliceblue";
-        letterBtn.setAttribute("id", `letter-${letter}`);
-        letterBtn.setAttribute("class", "noScale");
-        lettersBtn.push(letterBtn);
+        let letterSVGDefs = document.createElement("defs");
         
+        let letterSVGDefsStyle = document.createElement("style");
+        letterSVGDefsStyle.textContent = ".cls-5{stroke:#1d1d1b;stroke-miterlimit:10;fill:none;stroke-width:6px}";
+        
+        letterSVGDefs.appendChild(letterSVGDefsStyle);
+        letterSVGParent.appendChild(letterSVGDefs);
+
+        let letterSVGSheetPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        letterSVGSheetPath.setAttribute("id", `sheetPath-${letter}`);
+        letterSVGSheetPath.setAttribute("d", "M4.17 20.57h79.07c0 26.28-1.19 53 1.46 77.48a494.57 494.57 0 0 1-79 0C3 74.37 4.14 51 4.15 20.6c0-.02.01-.03.02-.03Z");
+        letterSVGSheetPath.setAttribute("transform", "translate(-1.88 -3.06)");
+        letterSVGSheetPath.setAttribute("style", "stroke-miterlimit:10;stroke-width:4px;");
+        letterSVGSheetPath.setAttribute("stroke", "#1d1d1b");
+        letterSVGSheetPath.setAttribute("fill", "#F0F8FF");
+        letterSVGParent.appendChild(letterSVGSheetPath);
+        
+        let letterSVGLetter = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        letterSVGLetter.setAttribute("id", `letter-${letter}`);
+        letterSVGLetter.setAttribute("transform", "translate(21.01 80.54)");
+        letterSVGLetter.setAttribute("style", "font-size:65px;");
+        letterSVGLetter.setAttribute("fill", "#1d1d1b");
+        letterSVGLetter.setAttribute("x", "23%");
+        letterSVGLetter.setAttribute("y", "-15%");
+        letterSVGLetter.setAttribute("alignment-baseline", "middle");
+        letterSVGLetter.setAttribute("text-anchor", "middle");
+        letterSVGLetter.textContent = letter;
+        letterSVGParent.appendChild(letterSVGLetter);
+        
+        let letterSVGFailPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        letterSVGFailPath.setAttribute("id", `failPath-${letter}`);
+        letterSVGFailPath.setAttribute("class", "cls-5");
+        letterSVGFailPath.setAttribute("d", "M16.42 36.4c8.8-6 10.91-4.84 11.47-4.36 1.48 1.3.15 5.63-2.57 14.25-2.51 7.94-3.87 10.35-3 11.07 1.53 1.23 8.33-3.38 13.25-9.29 5.48-6.59 5.8-11.39 8.56-11.46 3.07-.08 7.06 5.78 6.68 11.26s-5 9.44-12.6 16.12c-6.48 5.67-10.55 7.74-10.44 11.54A6.48 6.48 0 0 0 31.28 81c5.44 2.46 15-5.79 19.95-11.38 5.35-6.09 6.87-11 12.07-11.87A8.29 8.29 0 0 1 69.43 59c4.7 3.48 4.6 14.11-.2 19.58-3.59 4.08-8.11 3.36-11.67 8.7a16.09 16.09 0 0 0-2.37 5.93");
+        letterSVGFailPath.setAttribute("transform", "translate(-1.88 -3.06)");
+        letterSVGParent.appendChild(letterSVGFailPath);
+
+        let letterSVGFoundPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        letterSVGFoundPath.setAttribute("id", `foundPath-${letter}`);
+        letterSVGFoundPath.setAttribute("class", "cls-5");
+        letterSVGFoundPath.setAttribute("d", "m56.85 34.18 8 9.93a1.36 1.36 0 0 0 2.24-.18L78 24.88");
+        letterSVGFoundPath.setAttribute("transform", "translate(-1.88 -3.06)");
+        letterSVGParent.appendChild(letterSVGFoundPath);
+
+        let letterSVGPinPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        letterSVGPinPath.setAttribute("id", `pinPath-${letter}`);
+        letterSVGPinPath.setAttribute("fill", "#1d1d1b");
+        letterSVGPinPath.setAttribute("d", "M57.57 7.27 41.49 29.33 54.17 5.16l3.4 2.11z");
+        letterSVGParent.appendChild(letterSVGPinPath);
+
+        let letterSVGPinCircle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        letterSVGPinCircle.setAttribute("id", `pinCircle-${letter}`);
+        letterSVGPinCircle.setAttribute("cx", "55.77");
+        letterSVGPinCircle.setAttribute("cy", "6.38");
+        letterSVGPinCircle.setAttribute("r", "5.88");
+        letterSVGPinCircle.setAttribute("style", "stroke-miterlimit:10");
+        letterSVGPinCircle.setAttribute("stroke", "#1d1d1b");
+        letterSVGPinCircle.setAttribute("fill", "#1d1d1b");
+        letterSVGParent.appendChild(letterSVGPinCircle);
+
         currentLetterBtnDelai += letterBtnDelai;
 
         setTimeout(() =>{
-            letterBtnContainer.appendChild(letterBtn);
-            letterBtn.setAttribute("class", "scaleUpAnimation");
+            letterBtnContainer.appendChild(letterSVGParent);
+            letterSVGParent.setAttribute("class", "scaleUpAnimation");
         }, currentLetterBtnDelai);
-        
+
+        letterSVGParent.addEventListener("click", () => {
+            letterSVGParent.setAttribute("id", `Postit-${letter}-disabled`);
+            letterSVGLetter.setAttribute("fill", "#C8C8C8");
+            letterSVGPinPath.setAttribute("fill", "#C8C8C8");
+            letterSVGPinCircle.setAttribute("fill", "#C8C8C8");
+            letterSVGPinCircle.setAttribute("stroke", "#C8C8C8");
+            letterSVGSheetPath.setAttribute("stroke", "#C8C8C8");
+            checkLetter(letter);
+        });
+
+        letterSVGParent.addEventListener("mouseover", () =>{
+            letterSVGSheetPath.setAttribute("fill", "#AFAFAF");
+        });
+        letterSVGParent.addEventListener("mouseout", () => {
+            letterSVGSheetPath.setAttribute("fill", "#F0F8FF");
+        });
+
         currentLetterASCIIIndex++;
     }
 }
