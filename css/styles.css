@@ -20,6 +20,12 @@ header{
 section{
     grid-column: 2 / 2;
 }
+
+#letterBtnContainer{
+    justify-self: center;
+    width: 50%;
+}
+
 #tableSection{
     justify-self: center;
     display: none;
@@ -155,6 +161,18 @@ g[id="HangmanAllBody"]>g[id^="Legs"]{
     100% { transform: rotate(-3deg);}
 }
 
+@media screen and (min-width: 1423px){
+    #letterBtnContainer{
+        width: 100%;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1422px){
+    #letterBtnContainer{
+        width: 75%;
+    }
+}
+
 @media screen and (min-width: 768px){
     body{
         grid-template-columns: 1fr 75% 1fr;
@@ -168,7 +186,6 @@ g[id="HangmanAllBody"]>g[id^="Legs"]{
         grid-template-columns: 75% 25%;
         place-items: center ;
     }
-    
 }
 
 @media screen and (min-width: 420px) and (max-width: 768px){
@@ -177,6 +194,9 @@ g[id="HangmanAllBody"]>g[id^="Legs"]{
     }
     svg{
         width: 75%;
+    }
+    #letterBtnContainer{
+        width: 80%;
     }
 }
 
@@ -201,5 +221,9 @@ g[id="HangmanAllBody"]>g[id^="Legs"]{
 
     header>h1{
         font-size: 35px;
+    }
+
+    #letterBtnContainer{
+        width: 75%;
     }
 }
