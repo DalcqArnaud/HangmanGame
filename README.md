@@ -1,6 +1,6 @@
 # HangmanGame
 
-HangmanGame is a project to recreate the famous word game "Hangman" in which you have to found a word by guessing letters.
+HangmanGame is a project to recreate the famous word game "Hangman" in which you have to find a word by guessing letters.
 If you found all the letters of the word you win, if you take too much attemps you lose.
 
 ![Mobile format](./images/mobileFormat.PNG)
@@ -49,7 +49,7 @@ You can play on the Github page [here](https://dalcqarnaud.github.io/HangmanGame
 
 ### Local
 
-You can play on local by download the zip project file (that you can find under the green *Code* button at top right of the repo page).
+You can play on local by downloading the zip project file (that you can find under the green *Code* button at top right of the repo page).
 Once the zip is downloaded, extract the files and open the file "index.html" that is in it.
 
 ## How to Contribute 
