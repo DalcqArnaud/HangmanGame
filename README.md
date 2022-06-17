@@ -4,8 +4,15 @@ HangmanGame is a project to recreate the famous word game "Hangman" in which you
 If you found all the letters of the word you win, if you take too much attemps you lose.
 
 ![Mobile format](./images/mobileFormat.PNG)
+
+<details>
+<summary>More photos of the project :</summary>
+
 ![Tablet format](./images/tabletFormat.PNG)
 ![Computer format](./images/computerFormat.PNG)
+
+</details>
+
 
 ## The mission
 
