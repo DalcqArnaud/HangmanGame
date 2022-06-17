@@ -25,6 +25,10 @@ section{
     display: none;
 }
 
+table{
+    border-spacing: 8px;
+}
+
 td{
     border-bottom: 2px solid black;
     width: 50px;
@@ -42,18 +46,16 @@ td{
 svg[id^="Postit"]{
     width: 35px;
     margin: 3px;
+    transform-origin: 0% 20%;
 }
 
 svg[id$="disabled"]{
     pointer-events: none;
 }
 
-svg[id^="Postit"]>path[id^="failPath-"]{
-    visibility: hidden;
-}
-
-svg[id^="Postit"]>path[id^="foundPath-"]{
-    visibility: hidden;
+svg[id^="Postit"]>path[id^="scratchPath-"]{
+    stroke-dasharray: 250;
+    stroke-dashoffset: 250;
 }
 
 #play{
@@ -87,6 +89,18 @@ header>h1{
     animation: 1s scaleUp forwards;
 }
 
+.fallAnimation{
+    animation: 4s fall forwards linear;
+}
+
+.disappear{
+    animation: 0.5s disappear forwards;
+}
+
+path[class="draw"]{
+    animation: draw 0.35s linear forwards;
+}
+
 g[id="HangmanAllBody"]{
     position: relative;
     transform-origin: 80% 10%;
@@ -111,6 +125,23 @@ g[id="HangmanAllBody"]>g[id^="RightArm"]{
 
 g[id="HangmanAllBody"]>g[id^="Legs"]{
     visibility: hidden;
+}
+
+@keyframes draw {
+    to { stroke-dashoffset: 0; }
+  }
+
+@keyframes disappear {
+    from { opacity: 100%; }
+    to   { opacity: 0%; }
+}
+
+@keyframes fall {
+    0%      { transform: translateY(0px) rotate(0deg); opacity: 100%;     }
+    25%     { transform: translateY(125px) rotate(20deg); opacity: 100%;    }
+    50%     { transform: translateY(250px) rotate(-25deg); opacity: 100%;   }
+    75%     { transform: translateY(375px) rotate(15deg); opacity: 50%;     }
+    100%    { transform: translateY(500px) rotate(-18deg); opacity: 0%;     }
 }
 
 @keyframes scaleUp {

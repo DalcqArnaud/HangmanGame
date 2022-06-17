@@ -25,7 +25,7 @@ let enBtn = document.getElementById("english");
 let language = document.getElementById("language");
 let letterBtnContainer = document.getElementById("letterBtnContainer");
 let hangmanImage = document.getElementById("HangmanImage");
-let letterBtnDelai = 100;
+let letterBtnDelai = 50;
 let currentLetterBtnDelai = 0;
 
 let useFrench = true;
@@ -43,6 +43,18 @@ let RightArmPaths = document.querySelectorAll('g[id="HangmanAllBody"]>g[id^="Rig
 let HangmanDudeParts = [RightArmPaths, LeftArmPaths, LegsPaths, BodyPaths, HeadPaths];
 
 let lettersSVG = document.querySelectorAll("svg[id^='letter-']");
+
+let allLettersSVGParents = [];
+let allLettersSVGFillElements = [];
+let allLettersSVGStrokeElements = [];
+let allLettersSVGPin = [];
+let pinDesappearDuration = 1000;
+let maxFallAnimationDelay = 1.5;
+
+let minFallAnimationDuration = 2;
+let maxFallAnimationDuration = 3;
+
+let ScratchAnimationDuration = 500;
 
 ////////////////////////////////////////////////////////////// FUNCTIONS //////////////////////////////////////////////////////////////
 
@@ -104,10 +116,12 @@ function win(){
     lettersBtn.forEach(element => {
         setDisableState(element, true);
     });
-    hangmanLiveText.innerHTML = `You've won, the word was : ${randomWord.toUpperCase()} \nPress Play again to start a new game!`;
+    hangmanLiveText.innerHTML = `You've won, the word was : "${randomWord.toUpperCase()}" \nPress Play again to start a new game!`;
     if (window.innerWidth < 420) {
         hangmanLiveText.style.fontSize = "15px";
     }
+
+    fallAnimation();
 }
 
 /**
@@ -118,10 +132,45 @@ function gameOver(){
     lettersBtn.forEach(element => {
         setDisableState(element, true);
     });
-    hangmanLiveText.innerHTML = `You've lost, the word was : ${randomWord.toUpperCase()} \nPress Play again to start a new game!`;
+    hangmanLiveText.innerHTML = `You've lost, the word was : "${randomWord.toUpperCase()}" \nPress Play again to start a new game!`;
     if (window.innerWidth < 420) {
         hangmanLiveText.style.fontSize = "15px";
     }
+    
+    fallAnimation();
+}
+
+function fallAnimation(){
+    currentLetterASCIIIndex = startLetterASCIIIndex;
+    allLettersSVGParents.forEach(element => {
+        let letter = String.fromCharCode(currentLetterASCIIIndex);
+        element.setAttribute("id", `Postit-${letter}-disabled`);
+        currentLetterASCIIIndex++;
+    });
+    
+    allLettersSVGFillElements.forEach(element => {
+        element.setAttribute("fill", "#C8C8C8");
+    });
+    
+    allLettersSVGStrokeElements.forEach(element => {
+        element.setAttribute("stroke", "#C8C8C8");
+    });
+    
+    allLettersSVGPin.forEach(element =>{
+        element.setAttribute("class", "disappear");
+    });
+    
+    setTimeout(() =>{
+        allLettersSVGParents.forEach(element => {
+            let randomAnimationDelay = (Math.random() * maxFallAnimationDelay).toFixed(1);
+            randomAnimationDelay += "s"; 
+            element.style.animationDelay = randomAnimationDelay;
+            let randomAnimationDuration = (Math.random() * (maxFallAnimationDuration - minFallAnimationDuration + 1) + minFallAnimationDuration).toFixed(2);
+            randomAnimationDuration += "s";
+            element.style.animationDuration = randomAnimationDuration;
+            element.setAttribute("class", "fallAnimation");
+        });
+    }, pinDesappearDuration);
 }
 
 /**
@@ -233,20 +282,18 @@ function GenerateWordSlots(){
  * Generate letter buttons used for the user to enter letters to check
  */
 function GenerateLetterBtns(){
+
+    allLettersSVGParents = [];
+    allLettersSVGPin = [];
+    allLettersSVGFillElements = [];
+    allLettersSVGStrokeElements = [];
+
     for(let i = 0; i < 26; i++){
         let letter = String.fromCharCode(currentLetterASCIIIndex);
 
         let letterSVGParent = document.createElementNS("http://www.w3.org/2000/svg", "svg");
         letterSVGParent.setAttribute("id", `Postit-${letter}`);
         letterSVGParent.setAttribute("viewBox", "0 0 84.84 103.66")
-
-        let letterSVGDefs = document.createElement("defs");
-        
-        let letterSVGDefsStyle = document.createElement("style");
-        letterSVGDefsStyle.textContent = ".cls-5{stroke:#1d1d1b;stroke-miterlimit:10;fill:none;stroke-width:6px}";
-        
-        letterSVGDefs.appendChild(letterSVGDefsStyle);
-        letterSVGParent.appendChild(letterSVGDefs);
 
         let letterSVGSheetPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
         letterSVGSheetPath.setAttribute("id", `sheetPath-${letter}`);
@@ -262,26 +309,29 @@ function GenerateLetterBtns(){
         letterSVGLetter.setAttribute("transform", "translate(21.01 80.54)");
         letterSVGLetter.setAttribute("style", "font-size:65px;");
         letterSVGLetter.setAttribute("fill", "#1d1d1b");
-        letterSVGLetter.setAttribute("x", "23%");
-        letterSVGLetter.setAttribute("y", "-15%");
+        let firefox = navigator.userAgent.search("Firefox");
+        if (firefox > -1){
+            letterSVGLetter.setAttribute("x", "23%");
+            letterSVGLetter.setAttribute("y", "0%");
+        }
+        else{
+            letterSVGLetter.setAttribute("x", "23%");
+            letterSVGLetter.setAttribute("y", "-15%");
+        }
         letterSVGLetter.setAttribute("alignment-baseline", "middle");
         letterSVGLetter.setAttribute("text-anchor", "middle");
+        letterSVGLetter.setAttribute('draggable', false);
         letterSVGLetter.textContent = letter;
+        letterSVGLetter.style.userSelect = "none";
         letterSVGParent.appendChild(letterSVGLetter);
         
-        let letterSVGFailPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
-        letterSVGFailPath.setAttribute("id", `failPath-${letter}`);
-        letterSVGFailPath.setAttribute("class", "cls-5");
-        letterSVGFailPath.setAttribute("d", "M16.42 36.4c8.8-6 10.91-4.84 11.47-4.36 1.48 1.3.15 5.63-2.57 14.25-2.51 7.94-3.87 10.35-3 11.07 1.53 1.23 8.33-3.38 13.25-9.29 5.48-6.59 5.8-11.39 8.56-11.46 3.07-.08 7.06 5.78 6.68 11.26s-5 9.44-12.6 16.12c-6.48 5.67-10.55 7.74-10.44 11.54A6.48 6.48 0 0 0 31.28 81c5.44 2.46 15-5.79 19.95-11.38 5.35-6.09 6.87-11 12.07-11.87A8.29 8.29 0 0 1 69.43 59c4.7 3.48 4.6 14.11-.2 19.58-3.59 4.08-8.11 3.36-11.67 8.7a16.09 16.09 0 0 0-2.37 5.93");
-        letterSVGFailPath.setAttribute("transform", "translate(-1.88 -3.06)");
-        letterSVGParent.appendChild(letterSVGFailPath);
-
-        let letterSVGFoundPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
-        letterSVGFoundPath.setAttribute("id", `foundPath-${letter}`);
-        letterSVGFoundPath.setAttribute("class", "cls-5");
-        letterSVGFoundPath.setAttribute("d", "m56.85 34.18 8 9.93a1.36 1.36 0 0 0 2.24-.18L78 24.88");
-        letterSVGFoundPath.setAttribute("transform", "translate(-1.88 -3.06)");
-        letterSVGParent.appendChild(letterSVGFoundPath);
+        let letterSVGScratchPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        letterSVGScratchPath.setAttribute("id", `scratchPath-${letter}`);
+        letterSVGScratchPath.setAttribute("style", "stroke-miterlimit:10;fill:none;stroke-width:6px");
+        letterSVGScratchPath.setAttribute("stroke", "#1d1d1b");
+        letterSVGScratchPath.setAttribute("d", "M16.42 36.4c8.8-6 10.91-4.84 11.47-4.36 1.48 1.3.15 5.63-2.57 14.25-2.51 7.94-3.87 10.35-3 11.07 1.53 1.23 8.33-3.38 13.25-9.29 5.48-6.59 5.8-11.39 8.56-11.46 3.07-.08 7.06 5.78 6.68 11.26s-5 9.44-12.6 16.12c-6.48 5.67-10.55 7.74-10.44 11.54A6.48 6.48 0 0 0 31.28 81c5.44 2.46 15-5.79 19.95-11.38 5.35-6.09 6.87-11 12.07-11.87A8.29 8.29 0 0 1 69.43 59c4.7 3.48 4.6 14.11-.2 19.58-3.59 4.08-8.11 3.36-11.67 8.7a16.09 16.09 0 0 0-2.37 5.93");
+        letterSVGScratchPath.setAttribute("transform", "translate(-1.88 -3.06)");
+        letterSVGParent.appendChild(letterSVGScratchPath);
 
         let letterSVGPinPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
         letterSVGPinPath.setAttribute("id", `pinPath-${letter}`);
@@ -308,12 +358,18 @@ function GenerateLetterBtns(){
 
         letterSVGParent.addEventListener("click", () => {
             letterSVGParent.setAttribute("id", `Postit-${letter}-disabled`);
-            letterSVGLetter.setAttribute("fill", "#C8C8C8");
-            letterSVGPinPath.setAttribute("fill", "#C8C8C8");
-            letterSVGPinCircle.setAttribute("fill", "#C8C8C8");
-            letterSVGPinCircle.setAttribute("stroke", "#C8C8C8");
-            letterSVGSheetPath.setAttribute("stroke", "#C8C8C8");
+
             checkLetter(letter);
+
+            letterSVGScratchPath.setAttribute("class", "draw");
+            setTimeout(() =>{
+                letterSVGLetter.setAttribute("fill", "#C8C8C8");
+                letterSVGPinPath.setAttribute("fill", "#C8C8C8");
+                letterSVGPinCircle.setAttribute("fill", "#C8C8C8");
+                letterSVGScratchPath.setAttribute("stroke", "#C8C8C8");
+                letterSVGPinCircle.setAttribute("stroke", "#C8C8C8");
+                letterSVGSheetPath.setAttribute("stroke", "#C8C8C8");
+            }, ScratchAnimationDuration);
         });
 
         letterSVGParent.addEventListener("mouseover", () =>{
@@ -322,6 +378,16 @@ function GenerateLetterBtns(){
         letterSVGParent.addEventListener("mouseout", () => {
             letterSVGSheetPath.setAttribute("fill", "#F0F8FF");
         });
+
+        allLettersSVGParents.push(letterSVGParent);
+        allLettersSVGPin.push(letterSVGPinCircle);
+        allLettersSVGPin.push(letterSVGPinPath);
+        allLettersSVGFillElements.push(letterSVGLetter);
+        allLettersSVGFillElements.push(letterSVGPinPath);
+        allLettersSVGFillElements.push(letterSVGPinCircle);
+        allLettersSVGStrokeElements.push(letterSVGScratchPath);
+        allLettersSVGStrokeElements.push(letterSVGPinCircle);
+        allLettersSVGStrokeElements.push(letterSVGSheetPath);
 
         currentLetterASCIIIndex++;
     }
