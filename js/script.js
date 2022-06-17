@@ -358,6 +358,7 @@ function GenerateLetterBtns(){
 
         letterSVGParent.addEventListener("click", () => {
             letterSVGParent.setAttribute("id", `Postit-${letter}-disabled`);
+            letterSVGSheetPath.setAttribute("fill", "#F0F8FF");
 
             checkLetter(letter);
 
